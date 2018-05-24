@@ -9,6 +9,7 @@
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script type="text/javascript" src="/static/visualiser.js"></script>
     <script type="text/javascript" src="lib/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="lib/jquery-ui.min.js"></script>
     <script type="text/javascript" src="lib/fpsmeter.js"></script>
@@ -325,6 +326,8 @@ date            = vec4();
 <!-- channelResolution[4]  -->
 bands           = vec4(low, mid-low, mid-high, high) // FFT results
 backbuffer      = texture2D; // previous render frame
+<!-- engine input  -->
+groove          = vec3(a, b, c) // Input from groove engine
                 </pre>
             </div>
             <div id="tabsHelp-3">

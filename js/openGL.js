@@ -13,6 +13,7 @@ var vsDraw = null;
 var elapsedBandPeaks = [0.0, 0.0, 0.0, 0.0];
 //unifoms
 var vertPosU, l2, l3, l4, l5, l6, l7, l8, ch0, ch1, ch2, ch3, ch4, bs, screenResU, screenTexU, screenBlendU, translateUniform, scaleUniform, rotateUniform, gammaU, bandsTimeU, midiU;
+var groove;
 var resos = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
 var oscM = [null, null, null, null, null, null, null, null, null, null];
 var gammaValues = [1.0, 1.0, 1.0, 1.0];
@@ -174,7 +175,6 @@ function newShader(vs, shaderCode) {
         localStorage.lastValidCode = shaderCode;
     }
 
-
     if (mProgram !== null)
         gl.deleteProgram(mProgram);
 
@@ -196,6 +196,8 @@ function newShader(vs, shaderCode) {
 
     bs = gl.getUniformLocation(mProgram, "bands");
     bandsTimeU = gl.getUniformLocation(mProgram, "bandsTime");
+
+    groove = gl.getUniformLocation(mProgram, "groove");
 
     //OSC uniforms
     for (var i = 0; i < oscM.length; i++) {
@@ -487,12 +489,27 @@ function paint() {
     // gl.vertexAttribPointer(vertPosU, 2,  gl.FLOAT, false, 0, 0);
 
     //minputs
+
+    // TODO Work out how to test for presence of undefined Groove on startup
+    try {
+        gl.uniform3f(groove, Groove.visualiser.a, Groove.visualiser.b, Groove.visualiser.a);
+    } catch {}
+    
+    /*
+    if (groove !== null && (Groove !== undefined && Groove.visualiser !== undefined)) {
+
+        //console.log('Groove.visualiser.a', groove, Groove.visualiser.a);
+        //gl.uniform3f(groove, mSound.low, (mSound.mid + mSound.upper) / 2, mSound.high);
+    }
+    */
+    
     //fourband sound
     if (mSound && bandsOn && mAudioContext !== null) {
         if (bs !== null) {
 
             gl.uniform4f(bs, mSound.low, mSound.mid, mSound.upper, mSound.high);
         }
+        
         if (bandsTimeU !== null) { //this is for per fft band time elapsed events
             if (mSound.low > .7)
                 elapsedBandPeaks[0] = 0.0;
